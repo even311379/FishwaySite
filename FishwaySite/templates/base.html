@@ -1,0 +1,137 @@
+{% load static wagtailcore_tags wagtailuserbar  plotly_dash%}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            {% block title %}
+            {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
+            {% endblock %}
+            {% block title_suffix %}
+            {% wagtail_site as current_site %}
+            {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
+            {% endblock %}
+        </title>
+        {% if page.search_description %}
+        <meta name="description" content="{{ page.search_description }}" />
+        {% endif %}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {# Force all links in the live preview panel to be opened in a new tab #}
+        {% if request.in_preview_panel %}
+        <base target="_blank">
+        {% endif %}
+
+        {# Global stylesheets #}
+        <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/FishwaySite.css' %}">
+        <script src="https://cdn.tailwindcss.com"></script>
+        {% block extra_css %}
+        {# Override this in templates to add extra stylesheets #}
+        {% endblock %}
+        {% plotly_header %}
+    </head>
+
+    <body class="{% block body_class %}{% endblock %}" onload="brython()">
+        {% wagtailuserbar %} 
+
+
+        <div class="absolute top-0 left-0 right-0 flex h-80 justify-center items-center bg-cover bg-teal-950 bg-[url('https://ssl.gstatic.com/atari/images/simple-header-blended-small.png')]">
+            <div class="text-6xl text-white">    {{ page.title }} </div>
+        </div>
+        <div class="md:flex sticky top-0 px-6 py-3" id="nav_bar">
+            <i class='pr-4'><i class="fa-solid fa-bars text-white text-lg md:invisible active:animate-spin" id="nav_bar_small"></i></i>
+            <a class="text-xl text-white" href="/">碧潭堰魚道</a>
+            <div class="text-lg text-white ml-auto px-4 invisible md:visible"><a href="/">首頁</a></div>
+            <div class="text-lg text-white invisible md:visible">
+                <div class="px-4" id="menu_info_trigger">
+                    魚道資訊
+                    <i class="fa-solid fa-chevron-down text-lg text-white"></i>
+                </div>
+                <div class="fixed px-8 py-4 mt-2 w-48 -translate-x-2 bg-gray-800 rounded-sm shadow-2xl invisible" id="menu_info" >
+                    <div class="text-white hover:text-blue-400 py-2">
+                        <a href="/碧潭堰介紹">碧潭堰介紹</a>
+                    </div>
+                    <div class="text-white hover:text-blue-400 py-2">
+                        <a href="/碧潭堰魚類介紹">碧潭堰魚類介紹</a>
+                    </div>
+                    <div class="text-white hover:text-blue-400 py-2">
+                        <a href="/魚道設計">魚道設計</a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-lg text-white invisible md:visible">
+                <div class="px-4" id="menu_data_trigger">
+                    碧潭堰魚道統計資料
+                    <i class="fa-solid fa-chevron-down text-lg text-white"></i>
+                </div>
+                <div class="fixed px-8 py-4 mt-2 w-60 -translate-x-2 bg-gray-800 rounded-sm shadow-2xl invisible" id="menu_data" >
+                    <div class="text-white hover:text-blue-400 py-2">
+                        <a href="/資料下載">資料下載</a>
+                    </div>
+                    <div class="text-white hover:text-blue-400 py-2">
+                        <a href="/統計圖表">統計圖表</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="h-72"> </div>
+
+
+        <div class="container mx-auto md:px-18 xl:px-36 pt-8">
+            {% block content %}
+            {% endblock %}
+
+            {% if page.slug == "home" %}
+            <div class="flex flex-wrap justify-center py-4 gap-4">
+                <a class="py-2 px-16 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded" href="/碧潭堰介紹">
+                    碧潭堰介紹
+                </a>
+                <a class="py-2 px-16 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded", href="/">
+                    碧潭堰生態
+                </a>
+                <a class="py-2 px-16 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded", href="/魚道設計">
+                    魚道設計
+                </a>
+            </div>
+            {% else %}
+            <div class="py-4">
+                <a class="bg-cyan-800 hover:bg-cyan-600 text-white text-sm py-2 px-16 border rounded" href="/">
+                    回首頁
+                </a>
+            </div>
+            {% endif %}
+
+            {% comment %} TODO: the rest of the footer? {% endcomment %}
+        </div>
+
+        <div class="fixed top-0 bottom-0 left-0 right-0 bg-gray-500 bg-opacity-50 invisible", id="modal">
+            <div class="fixed top-0 bottom-0 left-0 w-48 bg-gray-800 text-white text-lg">
+                <div class="px-6 py-3">
+                    <i class="fa-solid fa-xmark" id="close_modal"></i>
+                </div>
+                <div class="pl-8 py-3">
+                    <div class=""> 首頁 </div>
+                    <div class=""> 魚道資訊 </div>
+                    <div class=""> DDDD </div>
+                    <div class=""> AAA </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        {# Global javascript #}
+        <script type="text/javascript" src="{% static 'js/FishwaySite.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/brython.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/brython_stdlib.js' %}"></script>
+        <script type="text/python">
+from python_scripts import home
+        </script>
+        {% block extra_js %}
+        {% endblock %}
+    </body>
+    {% plotly_footer %}
+</html>

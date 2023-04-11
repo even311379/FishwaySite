@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags plotly_dash %}
+{% block content %}
+
+{% for block in page.body %}
+	{% if block.block_type == 'heading' %}
+		<h1>{{ block.value }}</h1>
+	{% endif %}
+
+	{% if block.block_type == 'paragraph' %}
+		<p>{{ block.value }}</p>
+	{% endif %}
+
+	{% if block.block_type == 'image' %}
+		<img src="{{ block.value.url }}" alt="{{ block.value.alt }}">
+	{% endif %}
+
+	{% if block.block_type == 'demo' %}
+	<div class="flex flex-wrap flex-auto px-5 py-4 justify-center">
+		<div class="px-4 w-full lg:w-2/3 lg:order-2">
+			<div class="text-green text-4xl text-blue-500 py-5"> {{ block.value.topic }} </div> 
+			<div class="text-xl"> {{ block.value.description }} </div> 
+		</div>
+		<div class="px-4 w-full lg:w-1/3 lg:order-1" style="aspect-ratio:16/10">
+			{% if block.value.iframe %}
+			<iframe class="w-full h-full" src="{{ block.value.iframe }}"></iframe>
+			{% else %}
+				{% image block.value.photo width-400 %}
+			{% endif %}
+		</div>
+	</div>
+	{% endif %}
+	{% if block.block_type == 'gallery' %}
+		{% for image in block.value %}
+			{% image image width-400 %}
+		{% endfor %}
+	{% endif %}
+	{% if block.block_type == 'dashboard' %}
+		{% plotly_direct name=block.value %}
+	{% endif %}
+	
+{% endfor %}
+
+
+
+	
+{% endblock content %}
