@@ -7,17 +7,15 @@ from dash_bootstrap_templates import load_figure_template
 
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
 
+# when using bootstrap themes, you need to also load tailwind css to prevent bootstrap from overriding tailwind
 load_figure_template("FLATLY")
+external_script = ["https://tailwindcss.com/", {"src": "https://cdn.tailwindcss.com"}, dbc.themes.FLATLY]
+app = DjangoDash("TestApp", external_scripts=external_script)
 
-app = DjangoDash("TestApp", external_stylesheets=[dbc.themes.FLATLY])
-
-
-# app = Dash("TestApp")
 
 app.layout = html.Div([
-    html.H1(children='Title of Dash App', style={'textAlign':'center'}),
     dcc.Dropdown(df.country.unique(), 'Canada', id='dropdown-selection'),
-    dcc.Graph(figure=px.line(x=range(10), y = range(10)),id='graph-content')
+    dcc.Graph(figure=px.line(x=range(10), y = range(10)),id='graph-content', className="w-full shadow-2xl rounded-sm bg-gray-100")
 ])
 
 @app.callback(

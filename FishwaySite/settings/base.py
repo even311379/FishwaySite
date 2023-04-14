@@ -25,6 +25,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 INSTALLED_APPS = [
     "home",
+    "FishData",
     
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
+    "wagtail.contrib.modeladmin",
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
     "fontawesomefree",
     
@@ -127,7 +129,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

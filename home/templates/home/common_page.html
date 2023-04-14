@@ -4,11 +4,11 @@
 
 {% for block in page.body %}
 	{% if block.block_type == 'heading' %}
-		<h1>{{ block.value }}</h1>
+		<div class="text-center text-3xl text-blue-500 py-4 px-8">{{ block.value }}</div>
 	{% endif %}
 
 	{% if block.block_type == 'paragraph' %}
-		<p>{{ block.value }}</p>
+		<div class="text-xl leading-loose py-4 px-8">{{ block.value }}</div>
 	{% endif %}
 
 	{% if block.block_type == 'image' %}
@@ -31,9 +31,18 @@
 	</div>
 	{% endif %}
 	{% if block.block_type == 'gallery' %}
-		{% for image in block.value %}
-			{% image image width-400 %}
-		{% endfor %}
+		{% if block.value|length == 3 %}
+		<div class="md:grid md:grid-cols-3 md:grid-rows-2 md:gap-2 p-4 md:h-[72vh]">
+		 {% for image in block.value %}
+			{% image image original as tmp_image %}
+			<div class="{% cycle '' 'md:row-start-2' 'md:col-start-2 md:col-span-2 md:row-span-2' %}">
+				<a href="{{ tmp_image.url }}" data-lightbox="gallery">
+					<img class=" py-4 w-full md:h-full md:py-0" src="{{ tmp_image.url }}">
+				</a>
+			</div>
+		{% endfor %} 
+		</div>		
+		{% endif %}
 	{% endif %}
 	{% if block.block_type == 'dashboard' %}
 		{% plotly_direct name=block.value %}
