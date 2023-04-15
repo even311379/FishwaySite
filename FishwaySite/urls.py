@@ -7,6 +7,7 @@ from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
 from FishData import fig_test
+from FishData import urls as FishData_urls
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
@@ -28,8 +29,10 @@ urlpatterns = urlpatterns + [
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in
     # the list:
-    path("", include(wagtail_urls)),
     path("django_plotly_dash/", include("django_plotly_dash.urls")),
+    path('api-auth/', include('rest_framework.urls')),
+    path("api/", include(FishData_urls)),
+    path("", include(wagtail_urls)),
     # Alternatively, if you want Wagtail pages to be served from a subpath
     # of your site, rather than the site root:
     #    path("pages/", include(wagtail_urls)),

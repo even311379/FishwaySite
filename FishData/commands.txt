@@ -1,0 +1,20 @@
+# create db graph viz (need to install django extenstions and follows its setup)
+
+python manage.py graph_models --pydot -g -t original -a -o FishwaySite_DB_Visualization.png
+python manage.py graph_models --pydot -g -t original FishData -o FishData_DB_Visualization.png
+
+
+
+
+
+
+# sample to post new data in fish count api
+{
+"analysis":"樹下,好模型,2023-04-14 08:00:00",
+"fish":"無法辨認",
+"count":60	
+
+
+
+}
+]

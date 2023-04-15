@@ -4,7 +4,7 @@ from datetime import timedelta
 # Create your models here.
 
 class TargetFishSpecies(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='魚種名稱')
+    name = models.CharField(max_length=100, unique=True, verbose_name='魚種名稱', primary_key=True)
     description = models.TextField(blank=True, verbose_name='描述')
     def __str__(self):
         return self.name
@@ -18,7 +18,7 @@ class CameraInfo(models.Model):
         FHD = "FHD", ("1920 x 1080")
         QHD = "QHD", ("2560 x 1440")
         UHD = "UHD", ("3840 x 2160")
-    name = models.CharField(max_length=100, unique=True, verbose_name='監視器名稱')
+    name = models.CharField(max_length=100, unique=True, verbose_name='監視器名稱', primary_key=True)
     description = models.TextField(blank=True, verbose_name='描述')
     frame_rate = models.FloatField(default=30, verbose_name='影像幀率', help_text='單位為fps')        
     resolution = models.CharField(max_length=100, default=ResolutionChoices.FHD, choices=ResolutionChoices.choices, verbose_name='影像解析度')
@@ -29,7 +29,7 @@ class CameraInfo(models.Model):
         verbose_name_plural = '監視器資訊'
 
 class DetectionModelInfo(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='模型名稱')
+    name = models.CharField(max_length=100, unique=True, verbose_name='模型名稱', primary_key=True)
     description = models.TextField(blank=True, verbose_name='描述')
     def __str__(self):
         return self.name
@@ -38,7 +38,7 @@ class DetectionModelInfo(models.Model):
         verbose_name_plural = '模型資訊'
     
 class FishAnalysis(models.Model):
-    class AnyalysisType(models.TextChoices):
+    class AnyalysisTypes(models.TextChoices):
         DETECTION = "DE", ("偵測")
         COUNT = "CO", ("計數")
     
@@ -46,13 +46,12 @@ class FishAnalysis(models.Model):
     detection_model = models.ForeignKey(DetectionModelInfo, on_delete=models.CASCADE, verbose_name='模型')
     event_time = models.DateTimeField(verbose_name='事件開始時間')
     event_period = models.DurationField(verbose_name='事件時段', default=timedelta(minutes=5))
-    analysis_type = models.CharField(choices=AnyalysisType.choices, default=AnyalysisType.DETECTION, max_length=2, verbose_name='分析類型')
+    analysis_type = models.CharField(choices=AnyalysisTypes.choices, default=AnyalysisTypes.DETECTION, max_length=2, verbose_name='分析類型')
     analysis_time = models.DateTimeField(verbose_name='分析時間')
     can_anaylze = models.BooleanField(default=True, verbose_name="是否可分析", help_text="如果水體狀況不佳，則不可分析")
     analysis_log = models.TextField(blank=True, verbose_name="分析紀錄", help_text="紀錄分析過程中的特殊狀況")
         
     def __str__(self):
-        # return self.camera.name + " " + self.detection_model.name + " " + self.analysis_type + " " + str(self.event_time)
         if self.analysis_type == "DE":
             type_txt = "偵測分析"
         else:
@@ -68,7 +67,7 @@ class FishAnalysis(models.Model):
         verbose_name_plural = '魚類分析'
 
 class FishCount(models.Model):
-    analysis = models.ForeignKey(FishAnalysis, on_delete=models.CASCADE, verbose_name='分析')
+    analysis = models.ForeignKey(FishAnalysis, on_delete=models.CASCADE, verbose_name='分析', related_name='fish_count')
     fish = models.ForeignKey(TargetFishSpecies, on_delete=models.CASCADE, verbose_name='魚種')
     count = models.PositiveIntegerField(default=0, verbose_name='通過數')
     
@@ -79,7 +78,7 @@ class FishCount(models.Model):
         verbose_name_plural = '魚類通過數'
 
 class FishCountDetail(models.Model):
-    analysis = models.ForeignKey(FishAnalysis, on_delete=models.CASCADE, verbose_name='分析')
+    analysis = models.ForeignKey(FishAnalysis, on_delete=models.CASCADE, verbose_name='分析', related_name='fish_count_detail')
     fish = models.ForeignKey(TargetFishSpecies, on_delete=models.CASCADE, verbose_name='魚種')
     approximate_speed = models.FloatField(default=0, verbose_name='預估魚類速度', help_text='單位為pixel^2/秒')
     approximate_body_length = models.FloatField(default=0, verbose_name='預估魚體長度', help_text='單位為pixel')
@@ -95,7 +94,7 @@ class FishCountDetail(models.Model):
             
     
 class FishDetection(models.Model):
-    analysis = models.ForeignKey(FishAnalysis, on_delete=models.CASCADE, verbose_name='分析')
+    analysis = models.ForeignKey(FishAnalysis, on_delete=models.CASCADE, verbose_name='分析', related_name='fish_detection')
     fish = models.ForeignKey(TargetFishSpecies, on_delete=models.CASCADE, verbose_name='魚種')
     count = models.IntegerField(default=0, verbose_name='數量')
     frame = models.PositiveIntegerField(default=0, verbose_name='幀數')
