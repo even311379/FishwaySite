@@ -18,3 +18,35 @@ python manage.py graph_models --pydot -g -t original FishData -o FishData_DB_Vis
 
 }
 ]
+
+python manage.py create_fake_fish_data --n_species 6 --n_camera 2 --start_date 2023-3-17 --end_date 2023-4-17
+
+1 month of data takes 75.5MB ?? it depends on count ...
+
+fill_date = []
+fill_hour = []
+
+for d in dd:
+	hour_list = tdf.loc[tdf['date'] == d].hour.tolist()
+	for h in range(5, 20):
+		if h in hour_list:
+			continue
+		fill_date.append(d)
+		fill_hour.append(h)			
+
+
+
+
+
+
+fill = pd.DataFrame(dict(date=[], hour=[], count=[]))
+
+
+
+query_set = FishDetection.objects.filter(fish=fish_name).values_list('analysis__event_time', 'detect_time', 'count')
+# make it per hour histogram
+df = pd.DataFrame(list(query_set), columns=['event_time', 'detect_time', 'count'])
+dt = [d.astimezone(ZoneInfo(settings.TIME_ZONE)) + timedelta(hours=t.hour - 6, minutes=t.minute, seconds=t.second) for d, t in zip(df['event_time'], df['detect_time'])]
+df.drop(columns='event_time', inplace=True)
+df['detect_time'] = dt        
+df = df.groupby([df['detect_time'].dt.date, df['detect_time'].dt.hour]).mean()

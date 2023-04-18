@@ -25,8 +25,8 @@ class DetectionModelInfoAdmin(ModelAdmin):
 class FishAnalysisAdmin(ModelAdmin):
     model = FishAnalysis
     menu_label = '魚類分析' 
-    list_display = ('camera', 'detection_model', 'event_time', 'event_period', 'analysis_type', 'analysis_time', 'can_anaylze',)
-    list_filter = ('camera', 'detection_model', 'event_time', 'analysis_type', 'analysis_time', 'can_anaylze',)
+    list_display = ('camera', 'detection_model', 'event_time', 'event_period', 'analysis_type', 'analysis_time', 'can_analyze',)
+    list_filter = ('camera', 'detection_model', 'event_time', 'analysis_type', 'analysis_time', 'can_analyze',)
         
 
 class FishCountAdmin(ExportModelAdminMixin, ModelAdmin):
@@ -48,8 +48,8 @@ class FishDetectionAdmin(ExportModelAdminMixin, ModelAdmin):
     index_template_name = "FishData/export_csv.html"
     model = FishDetection
     menu_label = '魚類偵測'
-    list_display = ('analysis', 'fish', 'count', 'frame', 'can_detect',)
-    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish', 'count', 'frame', 'can_detect',)
+    list_display = ('analysis', 'fish', 'count', 'detect_time', 'can_detect',)
+    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish', 'can_detect',)
 
         
 class DataGroup(ModelAdminGroup):
@@ -58,3 +58,12 @@ class DataGroup(ModelAdminGroup):
     items = (TargetFishSpeciesAdmin, CameraInfoAdmin, DetectionModelInfoAdmin, FishAnalysisAdmin, FishCountAdmin, FishCountDetailAdmin, FishDetectionAdmin)
 
 modeladmin_register(DataGroup)
+
+
+# register to django admin instead of wagtail admin
+
+class FishDetectionDjangoAdmin(admin.ModelAdmin):
+    list_display = ('analysis', 'fish', 'count', 'detect_time', 'can_detect',)
+    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish', 'can_detect',)
+
+admin.site.register(FishDetection, FishDetectionDjangoAdmin)

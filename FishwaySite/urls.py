@@ -6,7 +6,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-from FishData import fig_test
+from FishData import dashapp_fish_count_plot, dashapp_fish_count_table
 from FishData import urls as FishData_urls
 
 urlpatterns = [

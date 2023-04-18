@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import timedelta
+from django.conf import settings
+from zoneinfo import ZoneInfo 
 
 # Create your models here.
 
@@ -48,7 +50,7 @@ class FishAnalysis(models.Model):
     event_period = models.DurationField(verbose_name='事件時段', default=timedelta(minutes=5))
     analysis_type = models.CharField(choices=AnyalysisTypes.choices, default=AnyalysisTypes.DETECTION, max_length=2, verbose_name='分析類型')
     analysis_time = models.DateTimeField(verbose_name='分析時間')
-    can_anaylze = models.BooleanField(default=True, verbose_name="是否可分析", help_text="如果水體狀況不佳，則不可分析")
+    can_analyze = models.BooleanField(default=True, verbose_name="是否可分析", help_text="如果水體狀況不佳，則不可分析")
     analysis_log = models.TextField(blank=True, verbose_name="分析紀錄", help_text="紀錄分析過程中的特殊狀況")
         
     def __str__(self):
@@ -56,11 +58,12 @@ class FishAnalysis(models.Model):
             type_txt = "偵測分析"
         else:
             type_txt = "計數分析"
-        if self.can_anaylze:
-            can_anaylze_simbol = "O"
+        if self.can_analyze:
+            can_analyze_symbol = "O"
         else:
-            can_anaylze_simbol = "X"
-        return f"{type_txt} ({self.event_time} - {self.camera} - {self.detection_model}) - {can_anaylze_simbol}"
+            can_analyze_symbol = "X"
+        time_str = self.event_time.astimezone(ZoneInfo(settings.TIME_ZONE)).strftime("%Y-%m-%d %H")
+        return f"{type_txt} ({time_str} - {self.camera} - {self.detection_model}) - {can_analyze_symbol}"
     
     class Meta:
         verbose_name = '魚類分析'
@@ -97,11 +100,11 @@ class FishDetection(models.Model):
     analysis = models.ForeignKey(FishAnalysis, on_delete=models.CASCADE, verbose_name='分析', related_name='fish_detection')
     fish = models.ForeignKey(TargetFishSpecies, on_delete=models.CASCADE, verbose_name='魚種')
     count = models.IntegerField(default=0, verbose_name='數量')
-    frame = models.PositiveIntegerField(default=0, verbose_name='幀數')
+    detect_time = models.TimeField(verbose_name='偵測時間')
     can_detect = models.BooleanField(default=True, verbose_name="是否可偵測", help_text="如果水體狀況不佳，則不可偵測")
     
     def __str__(self):
-        return str(self.fish) + " " + str(self.count) + " (" + str(self.frame) + ")"
+        return str(self.fish) + " " + str(self.count) + " (" + str(self.detect_time) + ")"
     class Meta:
         verbose_name = '魚類偵測'
         verbose_name_plural = '魚類偵測'
