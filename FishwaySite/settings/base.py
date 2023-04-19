@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
     "fontawesomefree",
     "rest_framework",
-    "django_extensions"        
+    "django_extensions",
+    "tailwind",
+    "theme"        
 ]
 
 MIDDLEWARE = [
@@ -177,3 +179,9 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+
+# tailwind settings
+TAILWIND_APP_NAME = 'theme'
+INTERAL_IPS = ["127.0.0.1",]
+NPM_BIN_PATH = r"C:/Program Files/nodejs/npm.cmd"

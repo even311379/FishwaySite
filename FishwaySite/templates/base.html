@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags wagtailuserbar  plotly_dash%}
+{% load static wagtailcore_tags wagtailuserbar  plotly_dash tailwind_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +24,7 @@
         {% endif %}
 
         {# Global stylesheets #}
+        {% tailwind_css %}
         <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
         <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
         <link rel="stylesheet" type="text/css" href="{% static 'css/FishwaySite.css' %}">
@@ -137,7 +138,7 @@
 
 
         {# Global javascript #}
-        <script src="https://cdn.tailwindcss.com"></script>
+        {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
         <script type="text/javascript" src="{% static 'js/FishwaySite.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/brython.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/brython_stdlib.js' %}"></script>
