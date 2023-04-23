@@ -86,14 +86,14 @@
             {% endblock %}
 
             {% if page.slug == "home" %}
-            <div class="flex flex-wrap justify-center py-4 gap-4">
-                <a class="py-2 px-16 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded" href="/碧潭堰介紹">
+            <div class="flex flex-row flex-wrap justify-center justify-items-center py-4 gap-4">
+                <a class="basis-2/3 md:basis-1/4 py-2 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded text-center" href="/碧潭堰介紹">
                     碧潭堰介紹
                 </a>
-                <a class="py-2 px-16 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded", href="/">
+                <a class="basis-2/3 md:basis-1/4 py-2 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded text-center", href="/">
                     碧潭堰生態
                 </a>
-                <a class="py-2 px-16 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded", href="/魚道設計">
+                <a class="basis-2/3 md:basis-1/4 py-2 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded text-center", href="/魚道設計">
                     魚道設計
                 </a>
             </div>
@@ -108,7 +108,7 @@
             {% comment %} TODO: the rest of the footer? {% endcomment %}
         </div>
 
-        <div class="fixed top-0 bottom-0 left-0 right-0 bg-gray-500 bg-opacity-50 hidden", id="modal">
+        <div class="fixed top-0 bottom-0 left-0 right-0 bg-gray-500 bg-opacity-50 hidden z-[999]", id="modal">
             <div class="fixed top-0 bottom-0 left-0 w-64 bg-gray-800 text-white">
                 <div class="px-6 py-3">
                     <i class="fa-solid fa-xmark text-xl" id="close_modal"></i>
@@ -135,7 +135,7 @@
                 </div>
             </div>
         </div>
-
+    <div class="bg-gray-900 hidden"></div>
 
         {# Global javascript #}
         {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
@@ -143,7 +143,7 @@
         <script type="text/javascript" src="{% static 'js/brython.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/brython_stdlib.js' %}"></script>
         <script type="text/python">
-            from python_scripts import home
+            import home
         </script>
         <script type="text/javascript" src="{% static 'js/lightbox-plus-jquery.min.js' %}"></script>
         {% block extra_js %}

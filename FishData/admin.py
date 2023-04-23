@@ -30,21 +30,23 @@ class FishAnalysisAdmin(ModelAdmin):
         
 
 class FishCountAdmin(ExportModelAdminMixin, ModelAdmin):
+    raw_id_fields = ('analysis',) # boost loading speed
     index_template_name = "FishData/export_csv.html"
     model = FishCount
     menu_label = '魚類通過數'
     list_display = ('analysis', 'fish', 'count')
-    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish', 'count')
+    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish')
 
 class FishCountDetailAdmin(ExportModelAdminMixin, ModelAdmin):
+    raw_id_fields = ('analysis',) # boost loading speed
     index_template_name = "FishData/export_csv.html"
     model = FishCountDetail
     menu_label = '魚類通過細節'
     list_display = ('analysis', 'fish', 'approximate_speed', 'approximate_body_length', 'approximate_body_height','enter_frame', 'leave_frame',)
-    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish', 'approximate_speed', 'approximate_body_length', 
-                   'approximate_body_height', 'enter_frame', 'leave_frame',)
+    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish',)
 
 class FishDetectionAdmin(ExportModelAdminMixin, ModelAdmin):
+    raw_id_fields = ('analysis',) # boost loading speed
     index_template_name = "FishData/export_csv.html"
     model = FishDetection
     menu_label = '魚類偵測'
