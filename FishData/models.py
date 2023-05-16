@@ -100,7 +100,7 @@ class FishDetection(models.Model):
     analysis = models.ForeignKey(FishAnalysis, on_delete=models.CASCADE, verbose_name='分析', related_name='fish_detection')
     fish = models.ForeignKey(TargetFishSpecies, on_delete=models.CASCADE, verbose_name='魚種')
     count = models.IntegerField(default=0, verbose_name='數量')
-    detect_time = models.TimeField(verbose_name='偵測時間')
+    detect_time = models.DurationField(verbose_name='偵測時間', default=timedelta(hours=8), help_text='幾時幾分幾秒進行這次偵測？')
     can_detect = models.BooleanField(default=True, verbose_name="是否可偵測", help_text="如果水體狀況不佳，則不可偵測")
     
     def __str__(self):

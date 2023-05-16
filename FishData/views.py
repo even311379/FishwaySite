@@ -134,7 +134,7 @@ class FishDetectionApiView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
         fish_detection = FishDetection.objects.all()
-        serializer = FishCountSerializer(fish_detection, many=True)
+        serializer = FishDetectionSerializer(fish_detection, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request, *args, **kwargs):

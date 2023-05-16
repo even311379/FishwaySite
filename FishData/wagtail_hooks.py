@@ -3,7 +3,8 @@ from wagtail.contrib.modeladmin.views import IndexView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.conf.urls import url
+# from django.conf.urls import url
+from django.urls import re_path
 from djqscsv import render_to_csv_response
 
 
@@ -78,7 +79,7 @@ class ExportModelAdminMixin:
     export_view_class = ExportView
     def get_admin_urls_for_registration(self):
         urls = super().get_admin_urls_for_registration()
-        urls += (url(self.url_helper.get_action_url_pattern('export'),
+        urls += (re_path(self.url_helper.get_action_url_pattern('export'),
                         self.export_view,
                         name=self.url_helper.get_action_url_name('export')), )     
         return urls

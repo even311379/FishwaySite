@@ -27,13 +27,25 @@ class FishCountSerializer(serializers.ModelSerializer):
     class Meta:
         model = FishCount
         fields = "__all__"
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['analysis'] = str(instance.analysis) # use str to replace FK id
+        return data
         
 class FishCountDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = FishCountDetail
         fields = "__all__"
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['analysis'] = str(instance.analysis) # use str to replace FK id
+        return data
         
 class FishDetectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = FishDetection
         fields = "__all__"
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['analysis'] = str(instance.analysis) # use str to replace FK id
+        return data
