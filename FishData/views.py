@@ -1,6 +1,6 @@
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.viewsets import ModelViewSet
 from .models import *
 from .serializers import *
 from rest_framework import permissions
@@ -9,39 +9,29 @@ from zoneinfo import ZoneInfo
 from django.conf import settings
 
 
-class TargetFishSpeciesApiView(APIView):
+class TargetFishSpeciesApiView(ModelViewSet):
+    queryset = TargetFishSpecies.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    def get(self, request, *args, **kwargs):
-        # print(self.kwargs)
-        items = TargetFishSpecies.objects.all()
-        serializer = TargetFishSpeciesSerializer(items, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer_class = TargetFishSpeciesSerializer
 
-
-class CameraInfoApiView(APIView):
+class CameraInfoApiView(ModelViewSet):
+    queryset = CameraInfo.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    def get(self, request):
-        camera_info = CameraInfo.objects.all()
-        serializer = CameraInfoSerializer(camera_info, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer_class = CameraInfoSerializer
 
-
-class DetectionModelInfoApiView(APIView):
+class DetectionModelInfoApiView(ModelViewSet):
+    queryset = DetectionModelInfo.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    def get(self, request):
-        detection_model_info = DetectionModelInfo.objects.all()
-        serializer = DetectionModelInfoSerializer(detection_model_info, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer_class = DetectionModelInfoSerializer
 
-
-class FishAnalysisApiView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    def get(self, request):
-        fish_analysis = FishAnalysis.objects.all()
-        serializer = FishAnalysisSerializer(fish_analysis, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+class FishAnalysisApiView(ModelViewSet):
+    queryset = FishAnalysis.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]    
+    serializer_class = FishAnalysisSerializer
     
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
+        if type(request.data) == list:
+            return super().create(request, *args, **kwargs)
         all_data = []
         for d in request.data:
             data = {
@@ -62,9 +52,10 @@ class FishAnalysisApiView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# todo: need test
+# TODO: need test
 def get_analysis_id(analysis_string, analysis_type="DE"):
     camera, detection_model, event_time_string = analysis_string.split(',')
+    print(event_time_string)
     event_time = datetime.strptime(event_time_string, '%Y-%m-%d %H:%M:%S').replace(tzinfo=ZoneInfo(settings.TIME_ZONE))
     
     analysis = FishAnalysis.objects.filter(
@@ -80,14 +71,15 @@ def get_analysis_id(analysis_string, analysis_type="DE"):
         print('analysis not found')
         return None
 
-class FishCountApiView(APIView):
+class FishCountApiView(ModelViewSet):
+    queryset = FishCount.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    def get(self, request):
-        fish_count = FishCount.objects.all()
-        serializer = FishCountSerializer(fish_count, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer_class = FishCountSerializer
     
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
+        if type(request.data) != list:
+            return super().create(request, *args, **kwargs)
+            
         all_data = []
         for d in request.data:
             data = {
@@ -103,14 +95,14 @@ class FishCountApiView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class FishCountDetailApiView(APIView):
+class FishCountDetailApiView(ModelViewSet):
+    queryset = FishCountDetail.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    def get(self, request):
-        fish_count_detail = FishCountDetail.objects.all()
-        serializer = FishCountDetailSerializer(fish_count_detail, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer_class = FishCountDetailSerializer
     
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
+        if type(request.data) != list:
+            return super().create(self, request, *args, **kwargs)
         all_data = []
         for d in request.data:
             data = {
@@ -130,21 +122,25 @@ class FishCountDetailApiView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class FishDetectionApiView(APIView):
+class FishDetectionApiView(ModelViewSet):
+    queryset = FishDetection.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    def get(self, request):
-        fish_detection = FishDetection.objects.all()
-        serializer = FishDetectionSerializer(fish_detection, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    def post(self, request, *args, **kwargs):
+    serializer_class = FishDetectionSerializer
+
+    # TODO: leave filter function in the future or never?
+    # def get_queryset(self):
+    #     return FishDetection.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        if type(request.data) != list:
+            return super().create(request, *args, **kwargs)
         all_data = []
         for d in request.data:
             data = {
                 'analysis': get_analysis_id(d.get('analysis'), "DE"),
                 'fish': d.get('fish'),
                 'count': d.get('count'),
-                'frame': d.get('frame'),
+                'detect_time': d.get('detect_time'),
                 'can_detect': d.get('can_detect'),
             }
             all_data.append(data)

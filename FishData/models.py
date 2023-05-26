@@ -15,15 +15,15 @@ class TargetFishSpecies(models.Model):
         verbose_name_plural = '目標魚種'
 
 class CameraInfo(models.Model):
-    class ResolutionChoices(models.TextChoices):
-        HD = "HD", ("1280 x 720")
-        FHD = "FHD", ("1920 x 1080")
-        QHD = "QHD", ("2560 x 1440")
-        UHD = "UHD", ("3840 x 2160")
+    # class ResolutionChoices(models.TextChoices):
+    #     HD = "HD", ("1280 x 720")
+    #     FHD = "FHD", ("1920 x 1080")
+    #     QHD = "QHD", ("2560 x 1440")
+    #     UHD = "UHD", ("3840 x 2160")
     name = models.CharField(max_length=100, unique=True, verbose_name='監視器名稱', primary_key=True)
     description = models.TextField(blank=True, verbose_name='描述')
-    frame_rate = models.FloatField(default=30, verbose_name='影像幀率', help_text='單位為fps')        
-    resolution = models.CharField(max_length=100, default=ResolutionChoices.FHD, choices=ResolutionChoices.choices, verbose_name='影像解析度')
+    # frame_rate = models.FloatField(default=30, verbose_name='影像幀率', help_text='單位為fps')        
+    # resolution = models.CharField(max_length=100, default=ResolutionChoices.FHD, choices=ResolutionChoices.choices, verbose_name='影像解析度')
     def __str__(self):
         return self.name
     class Meta:

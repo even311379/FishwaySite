@@ -15,7 +15,7 @@ class TargetFishSpeciesAdmin(ModelAdmin):
 class CameraInfoAdmin(ModelAdmin):
     model = CameraInfo
     menu_label = '監視器資訊'
-    list_display = ('name', 'frame_rate', 'resolution',)
+    list_display = ('name',)
 
 class DetectionModelInfoAdmin(ModelAdmin):
     model = DetectionModelInfo
@@ -63,6 +63,40 @@ modeladmin_register(DataGroup)
 
 
 # register to django admin instead of wagtail admin
+
+class TargetFishSpeciesDjangoAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+admin.site.register(TargetFishSpecies, TargetFishSpeciesDjangoAdmin )
+
+class CameraInfoDjangoAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+admin.site.register(CameraInfo, CameraInfoDjangoAdmin)
+
+class DetectionModelInfoDjangoAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+admin.site.register(DetectionModelInfo, DetectionModelInfoDjangoAdmin)
+
+
+class FishAnalysisDjangoAdmin(admin.ModelAdmin):
+    list_display = ('camera', 'detection_model', 'event_time', 'event_period', 'analysis_type', 'analysis_time', 'can_analyze',)
+    list_filter = ('camera', 'detection_model', 'event_time', 'analysis_type', 'analysis_time', 'can_analyze',)
+
+admin.site.register(FishAnalysis, FishAnalysisDjangoAdmin)
+
+class FishCountDjangoAdmin(admin.ModelAdmin):
+    list_display = ('analysis', 'fish', 'count')
+    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish')
+
+admin.site.register(FishCount, FishCountDjangoAdmin)
+
+class FishCountDetailDjangoAdmin(admin.ModelAdmin):
+    list_display = ('analysis', 'fish', 'approximate_speed', 'approximate_body_length', 'approximate_body_height','enter_frame', 'leave_frame',)
+    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish',)
+
+admin.site.register(FishCountDetail, FishCountDetailDjangoAdmin)
 
 class FishDetectionDjangoAdmin(admin.ModelAdmin):
     list_display = ('analysis', 'fish', 'count', 'detect_time', 'can_detect',)

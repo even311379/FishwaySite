@@ -4,7 +4,7 @@
 
 {% for block in page.body %}
 	{% if block.block_type == 'heading' %}
-		<div class="text-center text-3xl text-blue-500 py-4 px-8">{{ block.value }}</div>
+		<h2 class="text-center text-blue-500 py-4 px-8">{{ block.value }}</h2>
 	{% endif %}
 
 	{% if block.block_type == 'paragraph' %}
@@ -12,18 +12,23 @@
 	{% endif %}
 
 	{% if block.block_type == 'image' %}
-		<img src="{{ block.value.url }}" alt="{{ block.value.alt }}">
+		{% image block.value original as tmp_image %}
+		<div class="h-[36vh]">
+			<a href="{{ tmp_image.url }}" data-lightbox="gallery" aria-label="gallery-image">
+				<img class=" py-4 mx-auto w-auto h-full md:py-0" src="{{ tmp_image.url }}">
+			</a>
+		</div>
 	{% endif %}
 
 	{% if block.block_type == 'demo' %}
 	<div class="flex flex-wrap flex-auto px-5 py-4 justify-center">
 		<div class="px-4 w-full lg:w-2/3 lg:order-2">
-			<div class="text-green text-4xl text-blue-500 py-5"> {{ block.value.topic }} </div> 
+			<h3 class="text-green text-blue-500 py-5"> {{ block.value.topic }} </h3> 
 			<div class="text-xl"> {{ block.value.description }} </div> 
 		</div>
 		<div class="px-4 w-full lg:w-1/3 lg:order-1" style="aspect-ratio:16/10">
 			{% if block.value.iframe %}
-			<iframe class="w-full h-full" src="{{ block.value.iframe }}"></iframe>
+			<iframe title="iframe {{block.value.topic}}" class="w-full h-full" src="{{ block.value.iframe }}"></iframe>
 			{% else %}
 				{% image block.value.photo width-400 %}
 			{% endif %}
@@ -31,18 +36,73 @@
 	</div>
 	{% endif %}
 	{% if block.block_type == 'gallery' %}
+
+		{% if block.value|length == 2 %}
+		<div class="md:grid md:grid-cols-2 md:grid-rows-1 md:gap-2 p-4 md:h-[36vh]">
+		{% for image in block.value %}
+			{% image image original as tmp_image %}
+			<div>
+				<a href="{{ tmp_image.url }}" data-lightbox="gallery" aria-label="gallery-image">
+					<img class="py-4 w-full md:h-full md:py-0" src="{{ tmp_image.url }}">
+				</a>
+			</div>
+		{% endfor %} 
+		</div>		
+		{% endif %}
+
+
 		{% if block.value|length == 3 %}
-		<div class="md:grid md:grid-cols-3 md:grid-rows-2 md:gap-2 p-4 md:h-[72vh]">
+		<div class="md:grid md:grid-cols-3 md:grid-rows-2 md:gap-2 p-4 md:h-[48vh]">
 		 {% for image in block.value %}
 			{% image image original as tmp_image %}
 			<div class="{% cycle '' 'md:row-start-2' 'md:col-start-2 md:col-span-2 md:row-span-2' %}">
-				<a href="{{ tmp_image.url }}" data-lightbox="gallery">
+				<a href="{{ tmp_image.url }}" data-lightbox="gallery" aria-label="gallery-image">
+					<img class=" py-4 w-full md:h-full md:py-0" src="{{ tmp_image.url }}">					
+				</a>
+			</div>
+		{% endfor %} 
+		</div>		
+		{% endif %}
+
+		{% if block.value|length == 4 %}
+		<div class="md:grid md:grid-cols-2 md:grid-rows-2 md:gap-2 p-4 md:h-[72vh]">
+		 {% for image in block.value %}
+			{% image image original as tmp_image %}
+			<div>
+				<a href="{{ tmp_image.url }}" data-lightbox="gallery" aria-label="gallery-image">
 					<img class=" py-4 w-full md:h-full md:py-0" src="{{ tmp_image.url }}">
 				</a>
 			</div>
 		{% endfor %} 
 		</div>		
 		{% endif %}
+
+		{% if block.value|length == 5 %}
+		<div class="md:grid md:grid-cols-3 md:grid-rows-2 md:gap-2 p-4 md:h-[72vh]">
+		 {% for image in block.value %}
+			{% image image original as tmp_image %}
+			<div class="{% cycle '' 'md:col-span-2' '' '' '' '' %}">
+				<a href="{{ tmp_image.url }}" data-lightbox="gallery" aria-label="gallery-image">
+					<img class=" py-4 w-full md:h-full md:py-0" src="{{ tmp_image.url }}">
+				</a>
+			</div>
+		{% endfor %} 
+		</div>		
+		{% endif %}
+
+		{% if block.value|length == 6 %}
+		<div class="md:grid md:grid-cols-3 md:grid-rows-2 md:gap-2 p-4 md:h-[72vh]">
+		 {% for image in block.value %}
+			{% image image original as tmp_image %}
+			<div>
+				<a href="{{ tmp_image.url }}" data-lightbox="gallery" aria-label="gallery-image">
+					<img class=" py-4 w-full md:h-full md:py-0" src="{{ tmp_image.url }}">
+				</a>
+			</div>
+		{% endfor %} 
+		</div>		
+		{% endif %}
+
 	{% endif %}
 	{% if block.block_type == 'dashboard' %}
 		{% plotly_direct name=block.value %}

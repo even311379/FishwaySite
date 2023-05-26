@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags wagtailuserbar  plotly_dash tailwind_tags %}
+{% load static wagtailcore_tags wagtailuserbar  plotly_dash tailwind_tags menus_tag %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -40,43 +40,28 @@
 
 
         <div class="absolute top-0 left-0 right-0 flex h-80 justify-center items-center bg-cover bg-teal-950 bg-[url('https://ssl.gstatic.com/atari/images/simple-header-blended-small.png')]">
-            <div class="text-6xl text-white">    {{ page.title }} </div>
+            <h1 class="text-white">    {{ page.title }} </h1>
         </div>
         <div class="md:flex sticky top-0 h-14 px-6 py-3 z-50" id="nav_bar">
-            <i class='pr-4'><i class="fa-solid fa-bars text-white text-lg md:invisible " id="nav_bar_small"></i></i>
+            <icon class='pr-4'><icon class="fa-solid fa-bars text-white text-lg md:invisible " id="nav_bar_small"></icon></icon>
             <a class="text-xl text-white" href="/">碧潭堰魚道</a>
             <div class="text-lg text-white ml-auto px-4 invisible md:visible"><a href="/">首頁</a></div>
+            {% get_menus as ms %}
+            {% for m in ms %}
             <div class="text-lg text-white invisible md:visible">
-                <div class="px-4" id="menu_info_trigger">
-                    魚道資訊
-                    <i class="fa-solid fa-chevron-down text-lg text-white"></i>
+                <div class="px-4" id="menu_trigger_{{m.title}}">
+                    {{ m.title }}
+                    <icon class="fa-solid fa-chevron-down text-lg text-white"></icon>
                 </div>
-                <div class="fixed px-8 py-4 mt-2 w-48 -translate-x-2 bg-gray-800 rounded-sm shadow-2xl invisible" id="menu_info" >
+                <div class="fixed px-8 py-4 mt-2 w-48 -translate-x-2 bg-gray-800 rounded-sm shadow-2xl invisible" id="menu_{{m.title}}" >
+                    {% for sub in m.menu_items.all %}
                     <div class="text-white hover:text-blue-400 py-2">
-                        <a href="/碧潭堰介紹">碧潭堰介紹</a>
+                        <a href={{ sub.link_page.url}}>{{ sub.link_page.title}}</a>
                     </div>
-                    <div class="text-white hover:text-blue-400 py-2">
-                        <a href="/碧潭堰魚類介紹">碧潭堰魚類介紹</a>
-                    </div>
-                    <div class="text-white hover:text-blue-400 py-2">
-                        <a href="/魚道設計">魚道設計</a>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
-            <div class="text-lg text-white invisible md:visible">
-                <div class="px-4" id="menu_data_trigger">
-                    碧潭堰魚道統計資料
-                    <i class="fa-solid fa-chevron-down text-lg text-white"></i>
-                </div>
-                <div class="fixed px-8 py-4 mt-2 w-60 -translate-x-2 bg-gray-800 rounded-sm shadow-2xl invisible" id="menu_data" >
-                    <div class="text-white hover:text-blue-400 py-2">
-                        <a href="/資料下載">資料下載</a>
-                    </div>
-                    <div class="text-white hover:text-blue-400 py-2">
-                        <a href="/統計圖表">統計圖表</a>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
         <div class="h-72"> </div>
 
@@ -111,39 +96,126 @@
         <div class="fixed top-0 bottom-0 left-0 right-0 bg-gray-500 bg-opacity-50 hidden z-[999]", id="modal">
             <div class="fixed top-0 bottom-0 left-0 w-64 bg-gray-800 text-white">
                 <div class="px-6 py-3">
-                    <i class="fa-solid fa-xmark text-xl" id="close_modal"></i>
+                    <icon class="fa-solid fa-xmark text-xl" id="close_modal"></icon>
                 </div>
                 <div class="flex flex-col pl-8 py-3">
                     <a class="py-2" href="/"> 首頁 </a>
-                    <button class="-translate-x-5 py-2 text-left" id="btn_toggle_info">
-                        <i class="fa-solid fa-chevron-down" id="icon_toggle_info"></i>
-                        魚道資訊
+                    {% for m in ms %}
+                    <button class="-translate-x-5 py-2 text-left" id="btn_toggle_{{m.title}}">
+                        <icon class="fa-solid fa-chevron-down" id="icon_toggle_{{m.title}}"></icon>
+                        {{m.title}}
                     </button>
-                    <div class="hidden" id="toggle_info_content">
-                        <div class="py-2"><a href="/碧潭堰介紹"> 碧潭堰介紹 </a></div>
-                        <div class="py-2"><a href="/碧潭堰魚類介紹"> 碧潭堰魚類介紹 </a></div>
-                        <div class="py-2"><a href="/魚道設計"> 魚道設計 </a></div>
+                    <div class="hidden" id="toggle_content_{{m.title}}">
+                        {% for sub in m.menu_items.all %}
+                        <div class="py-2"><a href={{sub.link_page.url}}> {{sub.link_page.title}} </a></div>
+                        {% endfor %}
                     </div>
-                    <button class="-translate-x-5 py-2 text-left" id="btn_toggle_data"> 
-                        <i class="fa-solid fa-chevron-down" id="icon_toggle_data"></i>
-                        碧潭堰魚道統計資料 
-                    </button>
-                    <div class="hidden" id="toggle_data_content">
-                        <div class="py-2"><a href="/資料下載"> 資料下載 </a></div>
-                        <div class="py-2"><a href="/統計圖表"> 統計圖表 </a></div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-    <div class="bg-gray-900 hidden"></div>
+    {% comment %} for tailwind to detect styles wheb build...  {% endcomment %}
+    <div class="bg-gray-900 text-6xl text-4xl text-3xl text-2xl text-xl text-sm font-light hidden">
+    </div>
 
         {# Global javascript #}
-        {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
+        <script src="https://cdn.tailwindcss.com"></script>
         <script type="text/javascript" src="{% static 'js/FishwaySite.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/brython.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/brython_stdlib.js' %}"></script>
         <script type="text/python">
-            import home
+
+from browser import document, window, timer
+
+# use brython to apply common tag styles...
+for e in document.querySelectorAll("h1"):
+    e.classList.add("text-6xl")
+for e in document.querySelectorAll("h2"):
+    e.classList.add("text-4xl")
+for e in document.querySelectorAll("h3"):
+    e.classList.add("text-3xl")
+for e in document.querySelectorAll("h4"):
+    e.classList = ("text-2xl")
+for e in document.querySelectorAll("p"):
+    e.classList = ("text-xl")
+for e in document.querySelectorAll("i"):
+    e.classList.add("text-sm")
+    e.classList.add("font-light")
+
+
+{% for m in ms %}
+bHoverMenus_{{m.title}} = False
+
+def EnterMenuTrigger_{{m.title}}(ev):
+    document['menu_{{m.title}}'].classList.remove('invisible')
+    {% for m2 in ms%}
+    {% if m2 != m %}
+    document['menu_{{m2.title}}'].classList.add('invisible')
+    {% endif %}
+    {% endfor %}
+    
+def LeaveMenuTrigger_{{m.title}}(ev):
+    timer.set_timeout(CheckHoverMenu_{{m.title}}, 300)
+
+def CheckHoverMenu_{{m.title}}():
+    if not bHoverMenus_{{m.title}}:
+        document['menu_{{m.title}}'].classList.add('invisible')
+
+def EnterMenu_{{m.title}}(ev):
+    global bHoverMenus_{{m.title}}
+    bHoverMenus_{{m.title}} = True
+
+def LeaveMenu_{{m.title}}(ev):
+    global bHoverMenus_{{m.title}}
+    bHoverMenus_{{m.title}} = False
+    timer.set_timeout(lambda : document['menu_{{m.title}}'].classList.add('invisible'), 300)
+
+document['menu_trigger_{{m.title}}'].bind('mouseenter', EnterMenuTrigger_{{m.title}})
+document['menu_trigger_{{m.title}}'].bind('mouseleave', LeaveMenuTrigger_{{m.title}})
+document['menu_{{m.title}}'].bind('mouseenter', EnterMenu_{{m.title}})
+document['menu_{{m.title}}'].bind('mouseleave', LeaveMenu_{{m.title}})
+
+{% endfor %}
+
+def Scroll(ev):
+    if window.pageYOffset > 10:
+        document['nav_bar'].classList.add('bg-gray-900')
+    else:
+        document['nav_bar'].classList.remove('bg-gray-900')    
+
+document.bind('scroll', Scroll)
+
+
+# for < 768px
+def OpenModal(ev):
+    document['modal'].classList.remove('hidden')
+
+document["nav_bar_small"].bind("click", OpenModal)
+document["close_modal"].bind("click", lambda ev: document['modal'].classList.add('hidden'))
+
+{% for m in ms %}
+bOpen_{{m.title}} = False
+
+def Toggle_{{m.title}}(ev):
+    global bOpen_{{m.title}}
+    if bOpen_{{m.title}}:
+        document['toggle_content_{{m.title}}'].classList.add('hidden')
+        document['icon_toggle_{{m.title}}'].classList.remove('fa-chevron-up')
+        document['icon_toggle_{{m.title}}'].classList.add('fa-chevron-down')
+        bOpen_{{m.title}} = False
+    else:
+        document['toggle_content_{{m.title}}'].classList.remove('hidden')
+        document['icon_toggle_{{m.title}}'].classList.remove('fa-chevron-down')
+        document['icon_toggle_{{m.title}}'].classList.add('fa-chevron-up')
+        bOpen_{{m.title}} = True
+
+document["btn_toggle_{{m.title}}"].bind("click", Toggle_{{m.title}})
+
+{% endfor %}
+
+
+
+
         </script>
         <script type="text/javascript" src="{% static 'js/lightbox-plus-jquery.min.js' %}"></script>
         {% block extra_js %}

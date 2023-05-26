@@ -64,3 +64,6 @@ venv/
 
 media/
 */migrations/
+node_modules
+
+static/*

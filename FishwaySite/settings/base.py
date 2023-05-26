@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_extensions",
     "tailwind",
-    "theme"        
+    "theme",
+    "wagtailorderable"
 ]
 
 MIDDLEWARE = [
@@ -83,6 +84,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # "wagtailmenus.context_processors.wagtailmenus"
             ],
         },
     },
@@ -163,6 +165,7 @@ MEDIA_URL = "/media/"
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "FishwaySite"
+WAGTAILIMAGES_MAX_UPLOAD_SIZE = 25 * 1024 * 1024   # 15mb
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
@@ -184,4 +187,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # tailwind settings
 TAILWIND_APP_NAME = 'theme'
 INTERAL_IPS = ["127.0.0.1",]
-NPM_BIN_PATH = r"C:/Program Files/nodejs/npm.cmd"
+# NPM_BIN_PATH = r"C:/Program Files/nodejs/npm.cmd"
+
+# # DRF settings
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100
+}

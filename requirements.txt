@@ -7,3 +7,4 @@ pandas
 django-tailwind
 django-queryset-csv
 dash-bootstrap-templates
+wagtail-orderable
