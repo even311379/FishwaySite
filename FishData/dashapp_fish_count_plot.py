@@ -17,12 +17,22 @@ app = DjangoDash("PlotApp", external_scripts=external_script)
 
 fish_names = list(TargetFishSpecies.objects.all().values_list('name', flat=True))
 camera_names = list(CameraInfo.objects.all().values_list('name', flat=True))
+if camera_names:
+    default_camera_name = camera_names[0]
+else:
+    default_camera_name = "No camera"
+if fish_names:
+    default_fish_name = fish_names[0]
+else:
+    default_fish_name = "No fish name"    
+
 analysis_types = ["每日通過魚道數", "魚道利用狀況"]
+
 
 app.layout = html.Div([
     html.Div([
-        html.Div(["選擇位置:", dcc.Dropdown(camera_names, camera_names[0], id='dropdown-camera')], className="grow"),
-        html.Div(["選擇魚種:", dcc.Dropdown(fish_names, fish_names[0], id='dropdown-fish')], className="grow"),
+        html.Div(["選擇位置:", dcc.Dropdown(camera_names, default_camera_name, id='dropdown-camera')], className="grow"),
+        html.Div(["選擇魚種:", dcc.Dropdown(fish_names, default_fish_name, id='dropdown-fish')], className="grow"),
         html.Div(["分析類型:", dcc.Dropdown(analysis_types, analysis_types[0], id='dropdown-analysis')], className="grow md:col-start-4")],
              className="flex flex-row gap-4 grid md:grid-cols-4"),
     html.Div("每日魚道通過數量", className="text-4xl mx-auto text-blue-600 text-center p-4", id='title'),

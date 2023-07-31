@@ -18,11 +18,18 @@ app = DjangoDash("TableApp", external_scripts=external_script)
 fish_names = list(TargetFishSpecies.objects.all().values_list('name', flat=True))
 camera_names = list(CameraInfo.objects.all().values_list('name', flat=True))
 analysis_types = ["每日通過魚道數", "魚道利用狀況"]
-
+if camera_names:
+    default_camera_name = camera_names[0]
+else:
+    default_camera_name = "No camera"
+if fish_names:
+    default_fish_name = fish_names[0]
+else:
+    default_fish_name = "No fish name"   
 app.layout = html.Div([
     html.Div([
-        html.Div(["選擇位置:", dcc.Dropdown(camera_names, camera_names[0], id='dropdown-camera')], className="grow"),
-        html.Div(["選擇魚種:", dcc.Dropdown(fish_names, fish_names[0], id='dropdown-fish')], className="grow"),
+        html.Div(["選擇位置:", dcc.Dropdown(camera_names, default_camera_name, id='dropdown-camera')], className="grow"),
+        html.Div(["選擇魚種:", dcc.Dropdown(fish_names, default_fish_name, id='dropdown-fish')], className="grow"),
         html.Div(["選擇時間範圍", 
                   dcc.DatePickerRange(
                       min_date_allowed=date(2023,1,1), 

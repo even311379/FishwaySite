@@ -8,3 +8,4 @@ django-tailwind
 django-queryset-csv
 dash-bootstrap-templates
 wagtail-orderable
+django-browser-reload

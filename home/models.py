@@ -8,10 +8,14 @@ from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, PageChooserPanel, MultiFieldPanel, InlinePanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
+from wagtail.contrib.settings.models import (
+    BaseGenericSetting,
+    register_setting
+)
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-
-
+from wagtail_color_panel.fields import ColorField
+from wagtail_color_panel.edit_handlers import NativeColorPanel
 
 
 class CommonPage(Page):
@@ -21,7 +25,7 @@ class CommonPage(Page):
         ('paragraph', blocks.RichTextBlock()),
         ('image', ImageChooserBlock()),
         ('demo', blocks.StructBlock([
-           ('iframe', blocks.CharBlock(blank=True, max_length=100, help_text="iframe url", required=False)),
+           ('iframe', blocks.URLBlock(blank=True, max_length=100, help_text="iframe url", required=False)),
            ('photo', ImageChooserBlock(required=False)),
            ('topic', blocks.CharBlock(blank=True)),
            ('description', blocks.RichTextBlock()),
@@ -60,3 +64,30 @@ class Menu(ClusterableModel, Orderable):
 
     def __str__(self):
         return self.title
+
+@register_setting(icon='placeholder')
+class GenericPageContent(BaseGenericSetting):
+    banner_bg_image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+', null=True, help_text="頁首底圖", blank=True)
+    banner_bg_tint = ColorField(blank=True, help_text="頁首色調")
+    footer_bg_image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+', null=True, help_text="頁首底圖", blank=True)
+    footer_bg_tint = ColorField(blank=True, help_text="頁尾色調")
+    copyright_info = models.CharField(max_length=100, blank=True)
+    
+    class Meta:
+        verbose_name = "頁首與頁尾"
+    
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel('banner_bg_image'),
+                NativeColorPanel("banner_bg_tint"),
+            ],
+            "頁面旗幟(Banner)"),
+        MultiFieldPanel(
+            [
+                FieldPanel('footer_bg_image'),
+                FieldPanel("copyright_info"),
+                NativeColorPanel("footer_bg_tint"),
+            ],
+            '頁尾')
+    ]

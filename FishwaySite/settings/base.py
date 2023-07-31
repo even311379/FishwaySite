@@ -54,7 +54,9 @@ INSTALLED_APPS = [
     "django_extensions",
     "tailwind",
     "theme",
-    "wagtailorderable"
+    "wagtailorderable",
+    "wagtail.contrib.settings",
+    "wagtail_color_panel",
 ]
 
 MIDDLEWARE = [
@@ -84,6 +86,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "wagtail.contrib.settings.context_processors.settings"
                 # "wagtailmenus.context_processors.wagtailmenus"
             ],
         },

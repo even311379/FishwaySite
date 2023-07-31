@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static wagtailcore_tags wagtailimages_tags plotly_dash %}
+
 {% block content %}
 
 {% for block in page.body %}
@@ -52,7 +53,7 @@
 
 
 		{% if block.value|length == 3 %}
-		<div class="md:grid md:grid-cols-3 md:grid-rows-2 md:gap-2 p-4 md:h-[48vh]">
+		<div class="md:grid md:grid-cols-3 md:grid-rows-2 md:gap-2 p-4 md:h-[72vh]">
 		 {% for image in block.value %}
 			{% image image original as tmp_image %}
 			<div class="{% cycle '' 'md:row-start-2' 'md:col-start-2 md:col-span-2 md:row-span-2' %}">

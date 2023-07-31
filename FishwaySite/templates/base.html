@@ -1,4 +1,5 @@
-{% load static wagtailcore_tags wagtailuserbar  plotly_dash tailwind_tags menus_tag %}
+{% load static wagtailcore_tags wagtailuserbar plotly_dash tailwind_tags menus_tag wagtailsettings_tags wagtailimages_tags %}
+{% get_settings %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,8 +40,12 @@
         {% wagtailuserbar %} 
 
 
-        <div class="absolute top-0 left-0 right-0 flex h-80 justify-center items-center bg-cover bg-teal-950 bg-[url('https://ssl.gstatic.com/atari/images/simple-header-blended-small.png')]">
-            <h1 class="text-white">    {{ page.title }} </h1>
+        {% comment %} <div class="absolute top-0 left-0 right-0 flex h-80 justify-center items-center bg-cover bg-teal-950 bg-[url('https://ssl.gstatic.com/atari/images/simple-header-blended-small.png')]"> {% endcomment %}
+        {% image settings.home.GenericPageContent.banner_bg_image original as tmp_bg %}
+
+        <div class="absolute top-0 left-0 right-0 flex h-80 justify-center items-center bg-cover bg-[{{ settings.home.GenericPageContent.banner_bg_tint }}] bg-[url('{{ tmp_bg.url }}')]">
+        {% comment %} <header class="bg-cover bg-[{{ settings.home.GenericPageContent.banner_bg_tint }}] bg-[url('{{ tmp_bg.url }}')]"> {% endcomment %}
+            <h1 class="text-center text-white">    {{ page.title }} </h1>
         </div>
         <div class="md:flex sticky top-0 h-14 px-6 py-3 z-50" id="nav_bar">
             <icon class='pr-4'><icon class="fa-solid fa-bars text-white text-lg md:invisible " id="nav_bar_small"></icon></icon>
@@ -63,10 +68,10 @@
             </div>
             {% endfor %}
         </div>
-        <div class="h-72"> </div>
-
-
-        <div class="container mx-auto md:px-18 xl:px-36 p-8">
+        
+        
+        <div class="container mx-auto md:px-18 xl:px-36 p-8 min-h-[calc(100vh-9.5rem)]">
+            <div class="h-72"> </div>
             {% block content %}
             {% endblock %}
 
@@ -75,7 +80,7 @@
                 <a class="basis-2/3 md:basis-1/4 py-2 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded text-center" href="/碧潭堰介紹">
                     碧潭堰介紹
                 </a>
-                <a class="basis-2/3 md:basis-1/4 py-2 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded text-center", href="/">
+                <a class="basis-2/3 md:basis-1/4 py-2 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded text-center", href="/碧潭堰生態">
                     碧潭堰生態
                 </a>
                 <a class="basis-2/3 md:basis-1/4 py-2 bg-cyan-800 hover:bg-cyan-600 text-white text-sm border rounded text-center", href="/魚道設計">
@@ -89,9 +94,16 @@
                 </a>
             </div>
             {% endif %}
-
-            {% comment %} TODO: the rest of the footer? {% endcomment %}
         </div>
+
+        {% comment %} TODO: the rest of the footer? {% endcomment %}
+        {% image settings.home.GenericPageContent.footer_bg_image original as tmp_footer_bg %}
+        <div class="h-24 grid grid-cols-6 gap-4 px-4 place-content-center bg-cover bg-[{{ settings.home.GenericPageContent.footer_bg_tint }}] bg-[url('{{ tmp_footer_bg.url }}')]">
+            <div class="col-start-6 text-white">
+                {{ settings.home.GenericPageContent.copyright_info }}
+            </div>
+        </div>
+
 
         <div class="fixed top-0 bottom-0 left-0 right-0 bg-gray-500 bg-opacity-50 hidden z-[999]", id="modal">
             <div class="fixed top-0 bottom-0 left-0 w-64 bg-gray-800 text-white">
@@ -114,12 +126,12 @@
                 </div>
             </div>
         </div>
-    {% comment %} for tailwind to detect styles wheb build...  {% endcomment %}
+    {% comment %} for tailwind to detect styles web build...  {% endcomment %}
     <div class="bg-gray-900 text-6xl text-4xl text-3xl text-2xl text-xl text-sm font-light hidden">
     </div>
 
         {# Global javascript #}
-        {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
+        <script src="https://cdn.tailwindcss.com"></script>
         <script type="text/javascript" src="{% static 'js/FishwaySite.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/brython.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/brython_stdlib.js' %}"></script>
