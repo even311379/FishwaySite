@@ -28,6 +28,7 @@
         {% tailwind_css %}
         <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
         <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
         <link rel="stylesheet" type="text/css" href="{% static 'css/FishwaySite.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/lightbox.min.css' %}">
         {% block extra_css %}
@@ -70,7 +71,7 @@
         </div>
         
         
-        <div class="container mx-auto md:px-18 xl:px-36 p-8 min-h-[calc(100vh-9.5rem)]">
+        <div class="container mx-auto md:px-18 xl:px-36 p-8 min-h-[calc(100vh-28.5rem)]">
             <div class="h-72"> </div>
             {% block content %}
             {% endblock %}
@@ -97,10 +98,32 @@
         </div>
 
         {% comment %} TODO: the rest of the footer? {% endcomment %}
-        {% image settings.home.GenericPageContent.footer_bg_image original as tmp_footer_bg %}
-        <div class="h-24 grid grid-cols-6 gap-4 px-4 place-content-center bg-cover bg-[{{ settings.home.GenericPageContent.footer_bg_tint }}] bg-[url('{{ tmp_footer_bg.url }}')]">
-            <div class="col-start-6 text-white">
-                {{ settings.home.GenericPageContent.copyright_info }}
+        <div class="grid place-content-center h-28 bg-gray-600 text-white text-center font-bold text-xl">
+            <div class="leading-8">清華清華生態顧問有限公司</div>
+            <div class="leading-8">Tsinghua Ecological Consulting Co., Ltd.</div>
+        </div>
+        <div class="h-72 gap-2 p-2 pt-8 place-content-center bg-cover bg-gray-800 text-white text-center font-bold hidden md:grid md:grid-cols-5">
+            <div class="flex justify-center">
+                <icon class="px-4 fa-brands fa-facebook text-blue-800 text-[64px]"></icon>
+                <icon class="px-4 fa-brands fa-youtube text-red-800 text-[72px]"></icon>
+            </div>
+            <div>
+                <p class="py-4">關於我們</p> 
+                <div class="py-2 text-sm">公司理念</div>
+                <div class="py-2 text-sm">服務案例</div>
+            </div>
+            <div>
+                <p class="py-4">服務諮詢</p> 
+                <div class="py-2 text-sm">服務範疇</div>
+                <div class="py-2 text-sm">合作邀約</div>
+                <div class="py-2 text-sm">收費諮詢</div>
+                <div class="py-2 text-sm">服務款項</div>
+            </div>
+            <div class="col-span-2">
+                <p class="py-4">聯絡資訊</p> 
+                <div class="py-2 text-sm">Tel:03-6582641</div>
+                <div class="py-2 text-sm">Email: Tsinghua.eco@gmail.com</div>
+                <div class="py-2 text-sm">302053 新竹縣竹北市嘉政九街29號5樓</div>
             </div>
         </div>
 
@@ -147,9 +170,9 @@ for e in document.querySelectorAll("h2"):
 for e in document.querySelectorAll("h3"):
     e.classList.add("text-3xl")
 for e in document.querySelectorAll("h4"):
-    e.classList = ("text-2xl")
+    e.classList.add("text-2xl")
 for e in document.querySelectorAll("p"):
-    e.classList = ("text-xl")
+    e.classList.add("text-xl")
 for e in document.querySelectorAll("i"):
     e.classList.add("text-sm")
     e.classList.add("font-light")

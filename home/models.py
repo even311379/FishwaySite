@@ -69,9 +69,9 @@ class Menu(ClusterableModel, Orderable):
 class GenericPageContent(BaseGenericSetting):
     banner_bg_image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+', null=True, help_text="頁首底圖", blank=True)
     banner_bg_tint = ColorField(blank=True, help_text="頁首色調")
-    footer_bg_image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+', null=True, help_text="頁首底圖", blank=True)
-    footer_bg_tint = ColorField(blank=True, help_text="頁尾色調")
-    copyright_info = models.CharField(max_length=100, blank=True)
+    # footer_bg_image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+', null=True, help_text="頁首底圖", blank=True)
+    # footer_bg_tint = ColorField(blank=True, help_text="頁尾色調")
+    # copyright_info = models.CharField(max_length=100, blank=True)
     
     class Meta:
         verbose_name = "頁首與頁尾"
@@ -83,11 +83,11 @@ class GenericPageContent(BaseGenericSetting):
                 NativeColorPanel("banner_bg_tint"),
             ],
             "頁面旗幟(Banner)"),
-        MultiFieldPanel(
-            [
-                FieldPanel('footer_bg_image'),
-                FieldPanel("copyright_info"),
-                NativeColorPanel("footer_bg_tint"),
-            ],
-            '頁尾')
+        # MultiFieldPanel(
+        #     [
+        #         FieldPanel('footer_bg_image'),
+        #         FieldPanel("copyright_info"),
+        #         NativeColorPanel("footer_bg_tint"),
+        #     ],
+        #     '頁尾')
     ]
