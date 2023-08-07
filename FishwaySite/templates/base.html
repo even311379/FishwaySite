@@ -41,7 +41,6 @@
         {% wagtailuserbar %} 
 
 
-        {% comment %} <div class="absolute top-0 left-0 right-0 flex h-80 justify-center items-center bg-cover bg-teal-950 bg-[url('https://ssl.gstatic.com/atari/images/simple-header-blended-small.png')]"> {% endcomment %}
         {% image settings.home.GenericPageContent.banner_bg_image original as tmp_bg %}
 
         <div class="absolute top-0 left-0 right-0 flex h-80 justify-center items-center bg-cover bg-[{{ settings.home.GenericPageContent.banner_bg_tint }}] bg-[url('{{ tmp_bg.url }}')]">
@@ -50,8 +49,9 @@
         </div>
         <div class="md:flex sticky top-0 h-14 px-6 py-3 z-50" id="nav_bar">
             <icon class='pr-4'><icon class="fa-solid fa-bars text-white text-lg md:invisible " id="nav_bar_small"></icon></icon>
-            <a class="text-xl text-white" href="/">碧潭堰魚道</a>
-            <div class="text-lg text-white ml-auto px-4 invisible md:visible"><a href="/">首頁</a></div>
+            <a class="text-xl text-white invisible md:visible" href="/">首頁</a>
+            <div class="ml-auto"></div>
+            <!-- <div class="text-lg text-white ml-auto px-4 invisible md:visible"><a href="/">首頁</a></div> -->
             {% get_menus as ms %}
             {% for m in ms %}
             <div class="text-lg text-white invisible md:visible">
@@ -97,30 +97,33 @@
             {% endif %}
         </div>
 
-        {% comment %} TODO: the rest of the footer? {% endcomment %}
         <div class="grid place-content-center h-28 bg-gray-600 text-white text-center font-bold text-xl">
             <div class="leading-8">清華清華生態顧問有限公司</div>
             <div class="leading-8">Tsinghua Ecological Consulting Co., Ltd.</div>
         </div>
         <div class="h-72 gap-2 p-2 pt-8 place-content-center bg-cover bg-gray-800 text-white text-center font-bold hidden md:grid md:grid-cols-5">
             <div class="flex justify-center">
-                <icon class="px-4 fa-brands fa-facebook text-blue-800 text-[64px]"></icon>
-                <icon class="px-4 fa-brands fa-youtube text-red-800 text-[72px]"></icon>
+                <a href="https://www.facebook.com/profile.php?id=100095551712232" target="_blank">
+                    <icon class="px-4 fa-brands fa-square-facebook text-[#7aadff] text-[48px] mt-4"></icon>
+                </a>
+                <a href="https://www.youtube.com/@user-nw3kb3jp1y/featured" target="_blank">
+                    <icon class="px-4 fa-brands fa-square-youtube text-[#ff7575] text-[48px] mt-4"></icon>
+                </a>
             </div>
             <div>
-                <p class="py-4">關於我們</p> 
+                <div class="py-4 text-lg">關於我們</div> 
                 <div class="py-2 text-sm">公司理念</div>
                 <div class="py-2 text-sm">服務案例</div>
             </div>
             <div>
-                <p class="py-4">服務諮詢</p> 
+                <div class="py-4 text-lg">服務諮詢</div> 
                 <div class="py-2 text-sm">服務範疇</div>
                 <div class="py-2 text-sm">合作邀約</div>
                 <div class="py-2 text-sm">收費諮詢</div>
                 <div class="py-2 text-sm">服務款項</div>
             </div>
             <div class="col-span-2">
-                <p class="py-4">聯絡資訊</p> 
+                <div class="py-4 text-lg">聯絡資訊</div> 
                 <div class="py-2 text-sm">Tel:03-6582641</div>
                 <div class="py-2 text-sm">Email: Tsinghua.eco@gmail.com</div>
                 <div class="py-2 text-sm">302053 新竹縣竹北市嘉政九街29號5樓</div>
@@ -164,7 +167,8 @@ from browser import document, window, timer
 
 # use brython to apply common tag styles...
 for e in document.querySelectorAll("h1"):
-    e.classList.add("text-6xl")
+    e.classList.add("text-5xl")
+    e.classList.add("tracking-wider")
 for e in document.querySelectorAll("h2"):
     e.classList.add("text-4xl")
 for e in document.querySelectorAll("h3"):
