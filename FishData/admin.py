@@ -1,105 +1,197 @@
 from django.contrib import admin
 
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register, ModelAdminGroup
+# from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register, ModelAdminGroup
+from wagtail.snippets.models import register_snippet
+from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
 from .models import *
 
 from .wagtail_hooks import ExportModelAdminMixin
 
 # Register your models here.
 
-class TargetFishSpeciesAdmin(ModelAdmin):
+
+class TargetFishSpeciesAdmin(SnippetViewSet):
     model = TargetFishSpecies
-    menu_label = '目標魚種'
-    list_display = ('name',)
+    menu_label = "目標魚種"
+    list_display = ("name",)
 
-class CameraInfoAdmin(ModelAdmin):
+
+class CameraInfoAdmin(SnippetViewSet):
     model = CameraInfo
-    menu_label = '監視器資訊'
-    list_display = ('name',)
+    menu_label = "監視器資訊"
+    list_display = ("name",)
 
-class DetectionModelInfoAdmin(ModelAdmin):
+
+class DetectionModelInfoAdmin(SnippetViewSet):
     model = DetectionModelInfo
-    menu_label = '模型資訊'
-    list_display = ('name',)
+    menu_label = "模型資訊"
+    list_display = ("name",)
 
-class FishAnalysisAdmin(ModelAdmin):
-    model = FishAnalysis
-    menu_label = '魚類分析' 
-    list_display = ('camera', 'detection_model', 'event_time', 'event_period', 'analysis_type', 'analysis_time', 'can_analyze',)
-    list_filter = ('camera', 'detection_model', 'event_time', 'analysis_type', 'analysis_time', 'can_analyze',)
-        
 
-class FishCountAdmin(ExportModelAdminMixin, ModelAdmin):
-    raw_id_fields = ('analysis',) # boost loading speed
-    index_template_name = "FishData/export_csv.html"
-    model = FishCount
-    menu_label = '魚類通過數'
-    list_display = ('analysis', 'fish', 'count')
-    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish')
+class FishwayUtilityAnalysisAdmin(SnippetViewSet):
+    model = FishwayUtilityAnalysis
+    menu_label = "魚道使用狀況分析"
+    list_display = (
+        "camera",
+        "detection_model",
+        "event_date",
+        "analysis_time",
+        "detection_frequency",
+    )
+    list_filter = (
+        "camera",
+        "detection_model",
+        "event_date",
+        "analysis_time",
+        "detection_frequency",
+    )
 
-class FishCountDetailAdmin(ExportModelAdminMixin, ModelAdmin):
-    raw_id_fields = ('analysis',) # boost loading speed
-    index_template_name = "FishData/export_csv.html"
-    model = FishCountDetail
-    menu_label = '魚類通過細節'
-    list_display = ('analysis', 'fish', 'approximate_speed', 'approximate_body_length', 'approximate_body_height','enter_frame', 'leave_frame',)
-    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish',)
 
-class FishDetectionAdmin(ExportModelAdminMixin, ModelAdmin):
-    raw_id_fields = ('analysis',) # boost loading speed
-    index_template_name = "FishData/export_csv.html"
-    model = FishDetection
-    menu_label = '魚類偵測'
-    list_display = ('analysis', 'fish', 'count', 'detect_time', 'can_detect',)
-    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish', 'can_detect',)
+class FishwayPassAnalysisAdmin(SnippetViewSet):
+    model = FishwayPassAnalysis
+    menu_label = "魚道通過分析"
+    list_display = (
+        "camera",
+        "detection_model",
+        "event_date",
+        "analysis_time",
+        "sample_length",
+    )
+    list_filter = (
+        "camera",
+        "detection_model",
+        "event_date",
+        "analysis_time",
+        "sample_length",
+    )
 
-        
-class DataGroup(ModelAdminGroup):
-    menu_label = '魚道監測資料'
-    menu_icon = 'warning'
-    items = (TargetFishSpeciesAdmin, CameraInfoAdmin, DetectionModelInfoAdmin, FishAnalysisAdmin, FishCountAdmin, FishCountDetailAdmin, FishDetectionAdmin)
 
-modeladmin_register(DataGroup)
+class FishwayUtilityAdmin(ExportModelAdminMixin, SnippetViewSet):
+    raw_id_fields = ("analysis",)  # boost loading speed
+    # index_template_name = "FishData/export_csv.html"
+    model = FishwayUtility
+    menu_label = "魚類使用狀況"
+    list_display = (
+        "analysis",
+        "fish",
+        "hour",
+        "count",
+    )
+    list_filter = ("analysis__camera", "analysis__detection_model", "analysis__event_date", "fish", "hour")
+
+
+class PassCountAdmin(ExportModelAdminMixin, SnippetViewSet):
+    raw_id_fields = ("analysis",)  # boost loading speed
+    # index_template_name = "FishData/export_csv.html"
+    model = PassCount
+    menu_label = "魚道通過數"
+    list_display = ("analysis", "fish", "count")
+    list_filter = ("analysis__camera", "analysis__detection_model", "analysis__event_date", "fish")
+
+
+class DataGroup(SnippetViewSetGroup):
+    menu_label = "魚道監測資料"
+    menu_icon = "warning"
+    items = (
+        TargetFishSpeciesAdmin,
+        CameraInfoAdmin,
+        DetectionModelInfoAdmin,
+        FishwayUtilityAnalysisAdmin,
+        FishwayPassAnalysisAdmin,
+        FishwayUtilityAdmin,
+        PassCountAdmin,
+    )
+
+
+register_snippet(DataGroup)
 
 
 # register to django admin instead of wagtail admin
 
-class TargetFishSpeciesDjangoAdmin(admin.ModelAdmin):
-    list_display = ('name',)
 
-admin.site.register(TargetFishSpecies, TargetFishSpeciesDjangoAdmin )
+class TargetFishSpeciesDjangoAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+
+
+admin.site.register(TargetFishSpecies, TargetFishSpeciesDjangoAdmin)
+
 
 class CameraInfoDjangoAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ("name",)
+
 
 admin.site.register(CameraInfo, CameraInfoDjangoAdmin)
 
+
 class DetectionModelInfoDjangoAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ("name",)
+
 
 admin.site.register(DetectionModelInfo, DetectionModelInfoDjangoAdmin)
 
 
-class FishAnalysisDjangoAdmin(admin.ModelAdmin):
-    list_display = ('camera', 'detection_model', 'event_time', 'event_period', 'analysis_type', 'analysis_time', 'can_analyze',)
-    list_filter = ('camera', 'detection_model', 'event_time', 'analysis_type', 'analysis_time', 'can_analyze',)
+class FishwayUtilityAnalysisDjangoAdmin(admin.ModelAdmin):
+    list_display = (
+        "camera",
+        "detection_model",
+        "event_date",
+        "analysis_time",
+        "detection_frequency",
+    )
+    list_filter = (
+        "camera",
+        "detection_model",
+        "event_date",
+        "analysis_time",
+        "detection_frequency",
+    )
 
-admin.site.register(FishAnalysis, FishAnalysisDjangoAdmin)
 
-class FishCountDjangoAdmin(admin.ModelAdmin):
-    list_display = ('analysis', 'fish', 'count')
-    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish')
+admin.site.register(FishwayUtilityAnalysis, FishwayUtilityAnalysisDjangoAdmin)
 
-admin.site.register(FishCount, FishCountDjangoAdmin)
 
-class FishCountDetailDjangoAdmin(admin.ModelAdmin):
-    list_display = ('analysis', 'fish', 'approximate_speed', 'approximate_body_length', 'approximate_body_height','enter_frame', 'leave_frame',)
-    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish',)
+class FishwayPassAnalysisDjangoAdmin(admin.ModelAdmin):
+    list_display = (
+        "camera",
+        "detection_model",
+        "event_date",
+        "analysis_time",
+        "sample_length",
+    )
+    list_filter = (
+        "camera",
+        "detection_model",
+        "event_date",
+        "analysis_time",
+        "sample_length",
+    )
 
-admin.site.register(FishCountDetail, FishCountDetailDjangoAdmin)
 
-class FishDetectionDjangoAdmin(admin.ModelAdmin):
-    list_display = ('analysis', 'fish', 'count', 'detect_time', 'can_detect',)
-    list_filter = ('analysis__camera', 'analysis__detection_model', 'analysis__event_time', 'fish', 'can_detect',)
+admin.site.register(FishwayPassAnalysis, FishwayPassAnalysisDjangoAdmin)
 
-admin.site.register(FishDetection, FishDetectionDjangoAdmin)
+
+class PassCountDjangoAdmin(admin.ModelAdmin):
+    list_display = ("analysis", "fish", "count")
+    list_filter = ("analysis__camera", "analysis__detection_model", "analysis__event_date", "fish")
+
+
+admin.site.register(PassCount, PassCountDjangoAdmin)
+
+
+class FishwayUtilityDjangoAdmin(admin.ModelAdmin):
+    list_display = (
+        "analysis",
+        "hour",
+        "fish",
+        "count",
+    )
+    list_filter = (
+        "analysis__camera",
+        "analysis__detection_model",
+        "analysis__event_date",
+        "hour",
+        "fish",
+    )
+
+
+admin.site.register(FishwayUtility, FishwayUtilityDjangoAdmin)

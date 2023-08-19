@@ -26,7 +26,6 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     "home",
     "FishData",
-    
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -46,9 +45,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    
     "wagtail.contrib.modeladmin",
-    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+    "django_plotly_dash.apps.DjangoPlotlyDashConfig",
     "fontawesomefree",
     "rest_framework",
     "django_extensions",
@@ -68,7 +66,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
-    "django_plotly_dash.middleware.BaseMiddleware"
+    "django_plotly_dash.middleware.BaseMiddleware",
 ]
 
 ROOT_URLCONF = "FishwaySite.urls"
@@ -168,7 +166,7 @@ MEDIA_URL = "/media/"
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "FishwaySite"
-WAGTAILIMAGES_MAX_UPLOAD_SIZE = 25 * 1024 * 1024   # 15mb
+WAGTAILIMAGES_MAX_UPLOAD_SIZE = 25 * 1024 * 1024  # 15mb
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
@@ -182,18 +180,17 @@ WAGTAILSEARCH_BACKENDS = {
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 WAGTAILADMIN_BASE_URL = "http://example.com"
 
-X_FRAME_OPTIONS = 'SAMEORIGIN'
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
 # tailwind settings
-TAILWIND_APP_NAME = 'theme'
-INTERAL_IPS = ["127.0.0.1",]
+TAILWIND_APP_NAME = "theme"
+INTERAL_IPS = [
+    "127.0.0.1",
+]
 # NPM_BIN_PATH = r"C:/Program Files/nodejs/npm.cmd"
 
 # # DRF settings
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 100
-}
+REST_FRAMEWORK = {"DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination", "PAGE_SIZE": 100}
