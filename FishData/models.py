@@ -25,6 +25,7 @@ class TargetFishSpecies(models.Model):
         return self.name
 
     class Meta:
+        ordering = ["name"]
         verbose_name = "目標魚種"
         verbose_name_plural = "目標魚種"
 
@@ -37,6 +38,7 @@ class CameraInfo(models.Model):
         return self.name
 
     class Meta:
+        ordering = ["name"]
         verbose_name = "監視器資訊"
         verbose_name_plural = "監視器資訊"
 
@@ -49,6 +51,7 @@ class DetectionModelInfo(models.Model):
         return self.name
 
     class Meta:
+        ordering = ["name"]
         verbose_name = "模型資訊"
         verbose_name_plural = "模型資訊"
 
@@ -71,6 +74,7 @@ class FishwayUtilityAnalysis(FishAnalysis):
         return f"Utility analysis - {self.camera} - {self.event_date.strftime('%Y%m%d')}"
 
     class Meta:
+        ordering = ["-event_date"]
         verbose_name = "魚道使用分析"
         verbose_name_plural = "魚道使用分析"
 
@@ -82,6 +86,7 @@ class FishwayPassAnalysis(FishAnalysis):
         return f"Pass analysis - {self.camera} - {self.event_date.strftime('%Y%m%d')}"
 
     class Meta:
+        ordering = ["-event_date"]
         verbose_name = "魚道通過分析"
         verbose_name_plural = "魚道通過分析"
 
@@ -98,6 +103,7 @@ class FishwayUtility(models.Model):
         return str(self.fish) + " " + str(self.count) + " (" + str(self.hour) + ")"
 
     class Meta:
+        ordering = ["-analysis"]
         verbose_name = "魚類使用狀況"
         verbose_name_plural = "魚類使用狀況"
 
@@ -113,5 +119,6 @@ class PassCount(models.Model):
         return str(self.fish) + " " + str(self.count)
 
     class Meta:
+        ordering = ["-analysis"]
         verbose_name = "魚類通過數"
         verbose_name_plural = "魚類通過數"

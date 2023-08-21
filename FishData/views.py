@@ -33,7 +33,14 @@ class FishwayUtilityAnalysisApiView(ModelViewSet):
     serializer_class = FishwayUtilityAnalysisSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = FishwayUtilityAnalysisSerializer(data=request.data)
+        d = request.data
+        q = self.queryset.filter(
+            event_date=d.get("event_date"), camera=d.get("camera"), detection_model=d.get("detection_model")
+        )
+        if q:
+            serializer = FishwayUtilityAnalysisSerializer(q[0], data=d)
+        else:
+            serializer = FishwayUtilityAnalysisSerializer(data=d)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -46,7 +53,14 @@ class FishwayPassAnalysisApiView(ModelViewSet):
     serializer_class = FishwayPassAnalysisSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = FishwayPassAnalysisSerializer(data=request.data)
+        d = request.data
+        q = self.queryset.filter(
+            event_date=d.get("event_date"), camera=d.get("camera"), detection_model=d.get("detection_model")
+        )
+        if q:
+            serializer = FishwayPassAnalysisSerializer(q[0], data=d)
+        else:
+            serializer = FishwayPassAnalysisSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
